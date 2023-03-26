@@ -14,7 +14,13 @@ struct FBottomSlotActionInfo
 
 public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ActionInfo")
-    UTexture2D* ImageSkill;
+    UTexture2D* ImageSkill_1;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ActionInfo")
+    UTexture2D* ImageSkill_2;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ActionInfo")
+    UTexture2D* ImageSkill_3;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ActionInfo")
     TSubclassOf<ASTBaseSpellActor> Spell;

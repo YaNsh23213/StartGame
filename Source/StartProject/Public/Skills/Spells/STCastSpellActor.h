@@ -26,11 +26,24 @@ protected:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SpellLvL")
     TSubclassOf<AActor> Spell_3;
 
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SpellLvL")
+    UTexture2D* SpellImage_1;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SpellLvL")
+    UTexture2D* SpellImage_2;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SpellLvL")
+    UTexture2D* SpellImage_3;
+
     UPROPERTY()
     int32 LevelSpel;
 
 public:
     virtual void StartAction(AActor* OwnerActor) override;
+
+    UTexture2D* GetImage1() { return SpellImage_1; }
+    UTexture2D* GetImage2() { return SpellImage_2; }
+    UTexture2D* GetImage3() { return SpellImage_3; }
 
 private:
     void InitAnimations();
