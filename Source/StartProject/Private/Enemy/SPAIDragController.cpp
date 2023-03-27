@@ -17,7 +17,7 @@ void ASPAIDragController::Tick(float DeltaTime)
     const auto AimActor = GetFocusOnActor();
     if (AimActor)
     {
-        UE_LOG(LogTemp, Display, TEXT("FindEnemy %s"), *AimActor->GetName());
+        //UE_LOG(LogTemp, Display, TEXT("FindEnemy %s"), *AimActor->GetName());
     }
 }
 

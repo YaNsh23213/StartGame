@@ -3,10 +3,12 @@
 
 #include "Enemy/SPEnemyCharacter.h"
 #include "Enemy/SPAIPerceptionComponent.h"
+#include "Enemy/SPHealthAIAComponent.h"
 
 ASPEnemyCharacter::ASPEnemyCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
+    HealthAIAComponent = CreateDefaultSubobject<USPHealthAIAComponent>("HealthAIAComponent");
 }
 
 void ASPEnemyCharacter::BeginPlay()

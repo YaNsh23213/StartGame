@@ -9,15 +9,13 @@
 UCLASS()
 class STARTPROJECT_API USPFindEnemyService : public UBTService
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 public:
     USPFindEnemyService();
 
 protected:
-
-	 UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
     FBlackboardKeySelector EnemyKey;
 
-	 virtual void TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
-	
+    virtual void TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
 };
