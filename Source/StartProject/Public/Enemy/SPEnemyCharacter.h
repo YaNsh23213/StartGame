@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "SPEnemyCharacter.generated.h"
-
+class USPAIPerceptionComponent;
 UCLASS()
 class STARTPROJECT_API ASPEnemyCharacter : public ACharacter
 {
@@ -16,6 +16,9 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Level")
+    USPAIPerceptionComponent* AIPerceptionComponent;
 
 public:	
 	virtual void Tick(float DeltaTime) override;

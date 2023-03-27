@@ -2,11 +2,11 @@
 
 
 #include "Enemy/SPEnemyCharacter.h"
+#include "Enemy/SPAIPerceptionComponent.h"
 
 ASPEnemyCharacter::ASPEnemyCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
-
 }
 
 void ASPEnemyCharacter::BeginPlay()
