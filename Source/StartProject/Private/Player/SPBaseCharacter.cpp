@@ -5,6 +5,9 @@
 #include "Camera/CameraComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Player/Components/SPSkillsComponent.h"
+#include "Player/Components/SPBSComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "Player/Component/SPHealthComponent.h"
 
 ASPBaseCharacter::ASPBaseCharacter()
 {
@@ -14,11 +17,12 @@ ASPBaseCharacter::ASPBaseCharacter()
     SpringArmComponent->SetupAttachment(RootComponent);
     SpringArmComponent->bUsePawnControlRotation = true;
     SkillsComponent = CreateDefaultSubobject<USPSkillsComponent>("SkillsComponent");
+    BSComponent = CreateDefaultSubobject<USPBSComponent>("BSComponent");
+    HealthComponent = CreateDefaultSubobject<USPHealthComponent>("HealthComponent");
 
     CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComp3P"));
     CameraComponent->SetupAttachment(SpringArmComponent);
 }
-
 void ASPBaseCharacter::BeginPlay()
 {
     Super::BeginPlay();
@@ -28,6 +32,7 @@ void ASPBaseCharacter::BeginPlay()
         AActor* SpawnedActor = GetWorld()->SpawnActor<AActor>(Weapon, SocketTransform);
         SpawnedActor->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, "WeaponSocket");
     }
+    WidgetPauseInstance = CreateWidget<UUserWidget>(GetWorld(), WidgetClass);
 }
 
 void ASPBaseCharacter::Tick(float DeltaTime)
@@ -54,6 +59,9 @@ void ASPBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
     PlayerInputComponent->BindAction("SlotAction_9", IE_Pressed, this, &ASPBaseCharacter::SlotAction9);
     PlayerInputComponent->BindAction("SlotAction_10", IE_Pressed, this, &ASPBaseCharacter::SlotAction10);
     PlayerInputComponent->BindAction("SlotAction_11", IE_Pressed, this, &ASPBaseCharacter::SlotAction11);
+
+    PlayerInputComponent->BindAction("Pause", IE_Pressed, this, &ASPBaseCharacter::Pause);
+    PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ASPBaseCharacter::Jump);
 }
 
 void ASPBaseCharacter::Turn(float Value)
@@ -235,3 +243,14 @@ void ASPBaseCharacter::SlotAction11()
         }
     }
 }
+
+void ASPBaseCharacter::Pause()
+{
+    auto PlayerController = Cast<APlayerController>(GetController());
+    UGameplayStatics::SetGamePaused(GetWorld(), true);
+    FInputModeUIOnly UI;
+    PlayerController->SetInputMode(UI);
+    PlayerController->bShowMouseCursor = true;
+    WidgetPauseInstance->AddToViewport();
+}
+

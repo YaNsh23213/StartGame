@@ -9,6 +9,8 @@
 class USpringArmComponent;
 class UCameraComponent;
 class USPSkillsComponent;
+class USPBSComponent;
+class USPHealthComponent;
 UCLASS()
 class STARTPROJECT_API ASPBaseCharacter : public ACharacter
 {
@@ -29,8 +31,20 @@ protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
     USPSkillsComponent* SkillsComponent;
 
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+    USPBSComponent* BSComponent;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+    USPHealthComponent* HealthComponent;
+
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
     TSubclassOf<AActor> Weapon;
+
+    UPROPERTY(EditAnywhere, Category = "Widget")
+    TSubclassOf<UUserWidget> WidgetClass;
+
+    UPROPERTY()
+    UUserWidget* WidgetPauseInstance;
 
 public:
     virtual void Tick(float DeltaTime) override;
@@ -44,6 +58,8 @@ private:
     void MoveForward(float Amount);
     UFUNCTION()
     void MoveRight(float Amount);
+    UPROPERTY()
+    bool InPause = false;
 
     void SlotAction1();
     void SlotAction2();
@@ -56,4 +72,6 @@ private:
     void SlotAction9();
     void SlotAction10();
     void SlotAction11();
+
+    void Pause();
 };
