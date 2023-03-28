@@ -7,25 +7,35 @@
 #include "SPEnemyCharacter.generated.h"
 class USPAIPerceptionComponent;
 class USPHealthAIAComponent;
+class UAnimMontage;
 UCLASS()
 class STARTPROJECT_API ASPEnemyCharacter : public ACharacter
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	ASPEnemyCharacter();
+    ASPEnemyCharacter();
+
+    bool GetPhaseActionInProgress() { return PhaseActionInProgress; }
+    void SetPhaseActionInProgress(bool Value) { PhaseActionInProgress = Value; }
+
+    UAnimMontage* GetAnimMontagePhase1() { return AnimMontagePhase1; }
 
 protected:
-	virtual void BeginPlay() override;
+    virtual void BeginPlay() override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
     USPAIPerceptionComponent* AIPerceptionComponent;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
     USPHealthAIAComponent* HealthAIAComponent;
 
-public:	
-	virtual void Tick(float DeltaTime) override;
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Phase1")
+    UAnimMontage* AnimMontagePhase1;
 
+    bool PhaseActionInProgress = false;
+
+public:
+    virtual void Tick(float DeltaTime) override;
+    virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 };

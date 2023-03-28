@@ -11,6 +11,7 @@ class UCameraComponent;
 class USPSkillsComponent;
 class USPBSComponent;
 class USPHealthComponent;
+class UAnimMontage;
 UCLASS()
 class STARTPROJECT_API ASPBaseCharacter : public ACharacter
 {
