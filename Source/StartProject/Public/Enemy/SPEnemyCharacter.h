@@ -20,6 +20,7 @@ public:
     void SetPhaseActionInProgress(bool Value) { PhaseActionInProgress = Value; }
 
     UAnimMontage* GetAnimMontagePhase1() { return AnimMontagePhase1; }
+    UAnimMontage* GetAnimMontagePhase2() { return AnimMontagePhase2; }
 
 protected:
     virtual void BeginPlay() override;
@@ -32,6 +33,9 @@ protected:
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Phase1")
     UAnimMontage* AnimMontagePhase1;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Phase1")
+    UAnimMontage* AnimMontagePhase2;
 
     bool PhaseActionInProgress = false;
 

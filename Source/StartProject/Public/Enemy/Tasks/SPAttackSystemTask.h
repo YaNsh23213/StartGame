@@ -4,9 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorTree/BTTaskNode.h"
+#include "GameFramework/DamageType.h"
 #include "SPAttackSystemTask.generated.h"
 
 class ASPEnemyCharacter;
+class UBlackboardComponent;
+class USPEndAnimatoinAnimNotify;
+class AAIController;
 UCLASS()
 class STARTPROJECT_API USPAttackSystemTask : public UBTTaskNode
 {
@@ -19,6 +23,19 @@ protected:
 
     UPROPERTY()
     ASPEnemyCharacter* Pawn;
+    UPROPERTY()
+    UBlackboardComponent* BBComponent;
+    UPROPERTY()
+    USPEndAnimatoinAnimNotify* EndAnimatoinAnimNotify;
+    UPROPERTY()
+    AAIController* Controller;
+
+    FTimerHandle TimerHandle;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Info")
+    TSubclassOf<UDamageType> DamageType;
+
+
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Phase1")
     TSubclassOf<AActor> SpellPhase1;
@@ -26,6 +43,12 @@ protected:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Info")
     FName FocusKeyName = "EnemyActor";
 
+
     void InitActionPhase1();
+    void InitActionPhase2();
+
+    void HalfPhase2();
+
     void EndPhaseOne();
+    void EndPhaseTwo();
 };

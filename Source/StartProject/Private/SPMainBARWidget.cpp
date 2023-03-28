@@ -29,6 +29,7 @@ void USPMainBARWidget::UpdateHealth(float Value)
             const auto Component = Player->FindComponentByClass<USPHealthComponent>();
             if (Component)
             {
+                UE_LOG(LogTemp, Display, TEXT("New Percent %f"), Component->GetHealthPercent())
                 HP->SetPercent(Component->GetHealthPercent());
             }
         }

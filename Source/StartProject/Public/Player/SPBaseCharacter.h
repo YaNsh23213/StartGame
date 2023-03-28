@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Engine/EngineTypes.h"
 #include "SPBaseCharacter.generated.h"
 
 class USpringArmComponent;
@@ -19,6 +20,15 @@ class STARTPROJECT_API ASPBaseCharacter : public ACharacter
 
 public:
     ASPBaseCharacter();
+
+    AActor* GetEnemyActor() { return CurrentEnemy; }
+    void SetEnemyActor(AActor* Actor) { CurrentEnemy = Actor; }
+
+    bool GetBSStatus() { return BSStatus; }
+    void SetBSStatus(bool Value) { BSStatus = Value; }
+
+    bool GetIsEnemyWidgwetAdded() { return IsEnemyWidgwetAdded; }
+    void SetIsEnemyWidgwetAdded(bool Value) { IsEnemyWidgwetAdded = Value; }
 
 protected:
     virtual void BeginPlay() override;
@@ -46,6 +56,20 @@ protected:
 
     UPROPERTY()
     UUserWidget* WidgetPauseInstance;
+
+    UPROPERTY()
+    AActor* CurrentEnemy;
+
+    UPROPERTY(EditAnywhere, Category = "WidgetEnemy")
+    TSubclassOf<UUserWidget> WidgetEnemy;
+
+     UPROPERTY()
+    UUserWidget* WidgetEnemyInstance;
+
+    UPROPERTY()
+    bool BSStatus = false;
+    UPROPERTY()
+    bool IsEnemyWidgwetAdded = false;
 
 public:
     virtual void Tick(float DeltaTime) override;

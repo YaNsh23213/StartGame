@@ -8,6 +8,9 @@
 #include "Player/Components/SPBSComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Player/Component/SPHealthComponent.h"
+#include "Enemy/SPHealthAIAComponent.h"
+#include "Enemy/SPEnemyCharacter.h"
+#include "Enemy/SPHealthBarWidget.h"
 
 ASPBaseCharacter::ASPBaseCharacter()
 {
@@ -33,11 +36,21 @@ void ASPBaseCharacter::BeginPlay()
         SpawnedActor->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, "WeaponSocket");
     }
     WidgetPauseInstance = CreateWidget<UUserWidget>(GetWorld(), WidgetClass);
+    WidgetEnemyInstance = CreateWidget<UUserWidget>(GetWorld(), WidgetEnemy);
 }
 
 void ASPBaseCharacter::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
+    if (BSStatus == true)
+    {
+        if (IsEnemyWidgwetAdded == false)
+        {
+            WidgetEnemyInstance->AddToViewport();
+            IsEnemyWidgwetAdded = true;
+            Cast<USPHealthBarWidget>(WidgetEnemyInstance)->InitEmenyHP();
+        }
+    }
 }
 void ASPBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -253,4 +266,3 @@ void ASPBaseCharacter::Pause()
     PlayerController->bShowMouseCursor = true;
     WidgetPauseInstance->AddToViewport();
 }
-

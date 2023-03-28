@@ -30,7 +30,8 @@ void USPHealthComponent::OnTakeAnyDamage(
     AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
 {
     if (Damage <= 0.0f || IsDead()) return;
-    CurrentHealth = FMath::Clamp(CurrentHealth - 0, 0.0f, MaxHealth);
+    UE_LOG(LogTemp, Display, TEXT("Take Damage %f"), Damage);
+    CurrentHealth = FMath::Clamp(CurrentHealth - Damage, 0.0f, MaxHealth);
     OnHealthChanged.Broadcast(CurrentHealth);
     if (IsDead())
     {
