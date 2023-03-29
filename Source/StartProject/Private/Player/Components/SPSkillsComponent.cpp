@@ -4,6 +4,8 @@
 #include "Player/Components/SPSkillsComponent.h"
 #include "Skills/SPSlotSkillWidget.h"
 
+#include "Player/Components/SPBSComponent.h"
+
 USPSkillsComponent::USPSkillsComponent()
 {
 	PrimaryComponentTick.bCanEverTick = false;
@@ -24,7 +26,7 @@ void USPSkillsComponent::StartAction(FBottomSlotActionInfo Data)
     const auto TActor = NewObject<ASTBaseSpellActor>(this, Data.Spell);
     UE_LOG(LogTemp, Warning, TEXT("Skill StartAction"));
     if (!TActor) return;
-    TActor->StartAction(GetOwner());
+    TActor->StartAction(GetOwner(),Data.CurrentLVL);
 }
 void USPSkillsComponent::BeginPlay()
 {

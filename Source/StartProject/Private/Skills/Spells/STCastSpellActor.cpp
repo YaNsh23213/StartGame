@@ -5,10 +5,11 @@
 #include "Player/Components/SPSkillsComponent.h"
 #include "Player/AnimNotify/SPSpawnProjectileAnimNotify.h"
 #include "Player/AnimNotify/SPEndAnimatoinAnimNotify.h"
+#include "Player/Components/SPBSComponent.h"
 
-void ASTCastSpellActor::StartAction(AActor* OwnerActor)
+void ASTCastSpellActor::StartAction(AActor* OwnerActor, int32 LVLCast)
 {
-    Super::StartAction(OwnerActor);
+    Super::StartAction(OwnerActor, LVLCast);
     if (!OwnerActor || !AnimMontage) return;
     CurrentOwner = OwnerActor;
     UE_LOG(LogTemp, Warning, TEXT("Cast activated"));
@@ -20,7 +21,7 @@ void ASTCastSpellActor::StartAction(AActor* OwnerActor)
     {
         SkillsComponent->SetCanCast(false);
         SkillsComponent->SetCastInProgress(true);
-        LevelSpel = SkillsComponent->GetLevelCast();
+        LevelSpel = LVLCast;
     }
     InitAnimations();
     Player->PlayAnimMontage(AnimMontage);

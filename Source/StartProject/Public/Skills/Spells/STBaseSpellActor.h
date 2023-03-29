@@ -14,7 +14,7 @@ class STARTPROJECT_API ASTBaseSpellActor : public AActor
 public:	
 	ASTBaseSpellActor();
 
-	virtual void StartAction(AActor* OwnerActor);
+	virtual void StartAction(AActor* OwnerActor,int32 LVLCast);
 
 protected:
 	virtual void BeginPlay() override;

@@ -25,6 +25,9 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ActionInfo")
     TSubclassOf<ASTBaseSpellActor> Spell;
 
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ActionInfo")
+    int32 CurrentLVL = 1;
+
     // Need more info from Action
 };
 

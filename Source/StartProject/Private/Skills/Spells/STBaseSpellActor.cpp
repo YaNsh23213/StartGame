@@ -9,7 +9,7 @@ ASTBaseSpellActor::ASTBaseSpellActor()
 
 }
 
-void ASTBaseSpellActor::StartAction(AActor* OwnerActor)
+void ASTBaseSpellActor::StartAction(AActor* OwnerActor,int32 LVLCast)
 {
     UE_LOG(LogTemp, Warning, TEXT("Base spell activated"))
 }

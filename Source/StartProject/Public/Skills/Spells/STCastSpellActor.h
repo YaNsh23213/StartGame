@@ -39,7 +39,7 @@ protected:
     int32 LevelSpel;
 
 public:
-    virtual void StartAction(AActor* OwnerActor) override;
+    virtual void StartAction(AActor* OwnerActor, int32 LVLCast) override;
 
     UTexture2D* GetImage1() { return SpellImage_1; }
     UTexture2D* GetImage2() { return SpellImage_2; }

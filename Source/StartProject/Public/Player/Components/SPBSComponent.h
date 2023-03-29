@@ -19,9 +19,15 @@ public:
     UFUNCTION(BlueprintCallable, Category = "BS")
     void SetBSActive(bool Value) { BSActive = Value; }
 
+	int32 GetUpgradePoint() { return UpgradePoint; }
+    void SetUpgradePoint(int32 Amount) { UpgradePoint = +Amount; }
+
+
 protected:
 	virtual void BeginPlay() override;
 
+	UPROPERTY()
+    int32 UpgradePoint = 3;
 	bool BSActive = false;
 
 };
