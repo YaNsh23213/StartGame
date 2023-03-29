@@ -4,6 +4,7 @@
 #include "Enemy/SPEnemyCharacter.h"
 #include "Enemy/SPAIPerceptionComponent.h"
 #include "Enemy/SPHealthAIAComponent.h"
+#include "AIController.h"
 
 ASPEnemyCharacter::ASPEnemyCharacter()
 {
@@ -14,7 +15,18 @@ ASPEnemyCharacter::ASPEnemyCharacter()
 void ASPEnemyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+    if (HealthAIAComponent)
+    {
+        HealthAIAComponent->OnAIDeath.AddUObject(this, &ASPEnemyCharacter::DeadAnim);
+    }
 	
+}
+
+void ASPEnemyCharacter::DeadAnim() 
+{
+    PlayAnimMontage(DeathAnimMontage);
+    const auto AIController = Cast<AAIController>(GetController());
+    AIController->StopMovement();
 }
 
 void ASPEnemyCharacter::Tick(float DeltaTime)

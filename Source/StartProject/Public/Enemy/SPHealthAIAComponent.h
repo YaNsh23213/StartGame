@@ -19,7 +19,7 @@ public:
     FOnAIDeath OnAIDeath;
     FOnAIHealthChanged OnAIHealthChanged;
 
-    UFUNCTION()
+    UFUNCTION(BlueprintCallable)
     bool IsDead() const { return CurrentHealth <= 0.0f; }
 
     UFUNCTION(BlueprintCallable)

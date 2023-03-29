@@ -37,6 +37,10 @@ void ASPBaseCharacter::BeginPlay()
     }
     WidgetPauseInstance = CreateWidget<UUserWidget>(GetWorld(), WidgetClass);
     WidgetEnemyInstance = CreateWidget<UUserWidget>(GetWorld(), WidgetEnemy);
+    if (HealthComponent)
+    {
+        //HealthComponent->IsDead.
+    }
 }
 
 void ASPBaseCharacter::Tick(float DeltaTime)

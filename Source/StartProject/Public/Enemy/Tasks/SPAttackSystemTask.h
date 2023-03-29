@@ -11,6 +11,7 @@ class ASPEnemyCharacter;
 class UBlackboardComponent;
 class USPEndAnimatoinAnimNotify;
 class AAIController;
+class ASPBaseCharacter;
 UCLASS()
 class STARTPROJECT_API USPAttackSystemTask : public UBTTaskNode
 {
@@ -29,6 +30,8 @@ protected:
     USPEndAnimatoinAnimNotify* EndAnimatoinAnimNotify;
     UPROPERTY()
     AAIController* Controller;
+    UPROPERTY()
+    ASPBaseCharacter* FocusActor;
 
     FTimerHandle TimerHandle;
 

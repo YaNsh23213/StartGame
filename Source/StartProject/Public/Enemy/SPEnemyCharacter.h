@@ -37,7 +37,12 @@ protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Phase1")
     UAnimMontage* AnimMontagePhase2;
 
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Phase1")
+    UAnimMontage* DeathAnimMontage;
+
     bool PhaseActionInProgress = false;
+
+    void DeadAnim();
 
 public:
     virtual void Tick(float DeltaTime) override;

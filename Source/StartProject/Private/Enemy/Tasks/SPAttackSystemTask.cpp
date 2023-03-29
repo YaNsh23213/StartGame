@@ -32,12 +32,14 @@ EBTNodeResult::Type USPAttackSystemTask::ExecuteTask(UBehaviorTreeComponent& Own
     const auto Component = Pawn->FindComponentByClass<USPHealthAIAComponent>();
     if (!Component) return EBTNodeResult::Failed;
 
-    const auto FocusActor = Cast<ASPBaseCharacter>(BBComponent->GetValueAsObject(FocusKeyName));
+    FocusActor = Cast<ASPBaseCharacter>(BBComponent->GetValueAsObject(FocusKeyName));
+    if (!FocusActor) return EBTNodeResult::Failed;
     if (FocusActor->GetEnemyActor() == nullptr)
     {
         FocusActor->SetEnemyActor(Pawn);
     }
     FocusActor->SetBSStatus(true);
+    if (Component->IsDead()) return EBTNodeResult::Failed;
 
     auto CurrentHealth = Component->GetCurrentHealth();
     if (CurrentHealth > 80 && CurrentHealth <= 100)
@@ -47,7 +49,8 @@ EBTNodeResult::Type USPAttackSystemTask::ExecuteTask(UBehaviorTreeComponent& Own
             UE_LOG(LogTemp, Display, TEXT("Phase 1 HP %f"), CurrentHealth);
             InitActionPhase1();
             Pawn->SetPhaseActionInProgress(true);
-            Controller->SetFocus(FocusActor);
+            const auto LookAtRotation = UKismetMathLibrary::FindLookAtRotation(Pawn->GetActorLocation(), FocusActor->GetActorLocation());
+            Pawn->SetActorRotation(LookAtRotation);
         }
     }
     if (CurrentHealth > 0 && CurrentHealth <= 80)
@@ -69,18 +72,20 @@ void USPAttackSystemTask::InitActionPhase1()
     const auto NotifyEvents = Pawn->GetAnimMontagePhase1()->Notifies;
     for (auto NotifyEvent : NotifyEvents)
     {
-        EndAnimatoinAnimNotify = Cast<USPEndAnimatoinAnimNotify>(NotifyEvent.Notify);
-
-        if (EndAnimatoinAnimNotify)
+        if (NotifyEvent.Notify)
         {
-            EndAnimatoinAnimNotify->OnEndAnimation.AddUObject(this, &USPAttackSystemTask::EndPhaseOne);
+            EndAnimatoinAnimNotify = Cast<USPEndAnimatoinAnimNotify>(NotifyEvent.Notify);
+
+            if (EndAnimatoinAnimNotify)
+            {
+                EndAnimatoinAnimNotify->OnEndAnimation.AddUObject(this, &USPAttackSystemTask::EndPhaseOne);
+            }
         }
     }
 }
 
 void USPAttackSystemTask::InitActionPhase2()
 {
-    const auto FocusActor = Cast<AActor>(BBComponent->GetValueAsObject(FocusKeyName));
     Controller->MoveToActor(FocusActor, 200.0f, true, true, true, 0, true);
     GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &USPAttackSystemTask::HalfPhase2, 0.5f, true);
 }
@@ -88,11 +93,16 @@ void USPAttackSystemTask::InitActionPhase2()
 void USPAttackSystemTask::EndPhaseOne()
 {
     const auto Location = Pawn->GetMesh()->GetSocketLocation("SpawnCast");
-    const auto EnemyLocation = Cast<AActor>(BBComponent->GetValueAsObject(FocusKeyName))->GetActorLocation();
-    const auto LookAtRotation = UKismetMathLibrary::FindLookAtRotation(Pawn->GetActorLocation(), EnemyLocation);
-    FActorSpawnParameters SpawnParams;
-    UE_LOG(LogTemp, Display, TEXT("Use Cast"));
-    GetWorld()->SpawnActor<AActor>(SpellPhase1, Location, LookAtRotation, SpawnParams);
+    const auto Enemy = Cast<AActor>(BBComponent->GetValueAsObject(FocusKeyName));
+    if (Enemy)
+    {
+        const auto EnemyLocation = Enemy->GetActorLocation();
+        const auto LookAtRotation = UKismetMathLibrary::FindLookAtRotation(Pawn->GetActorLocation(), EnemyLocation);
+        FActorSpawnParameters SpawnParams;
+        UE_LOG(LogTemp, Display, TEXT("Use Cast"));
+        GetWorld()->SpawnActor<AActor>(SpellPhase1, Location, LookAtRotation, SpawnParams);
+    }
+    Controller->ClearFocus(EAIFocusPriority::Default);
     Pawn->SetPhaseActionInProgress(false);
     EndAnimatoinAnimNotify->OnEndAnimation.Clear();
 }
@@ -102,7 +112,7 @@ void USPAttackSystemTask::HalfPhase2()
     const auto Enemy = Cast<AActor>(BBComponent->GetValueAsObject(FocusKeyName));
     auto Distance = Pawn->GetDistanceTo(Enemy);
     UE_LOG(LogTemp, Display, TEXT("Distance %f"), Distance);
-    if (Distance < 300.0f)
+    if (Distance < 300.0f && Distance > 0)
     {
         UE_LOG(LogTemp, Display, TEXT("Distance Melee"));
         if (!Pawn || !Pawn->GetAnimMontagePhase2()) return;
@@ -124,13 +134,15 @@ void USPAttackSystemTask::HalfPhase2()
 void USPAttackSystemTask::EndPhaseTwo()
 {
     const auto Enemy = Cast<ASPBaseCharacter>(BBComponent->GetValueAsObject(FocusKeyName));
-    UE_LOG(LogTemp, Display, TEXT("Name Enemy %s"), *Enemy->GetName());
-    FDamageEvent d;
-    d.DamageTypeClass = UDamageType::StaticClass();
-    Enemy->TakeDamage(20.0f, d, Pawn->GetController(), Pawn);
-    // UGameplayStatics::ApplyDamage(Enemy, 20.0f, Pawn->GetController(), Pawn, DamageType);
+    if (Enemy)
+    {
+        FDamageEvent d;
+        d.DamageTypeClass = UDamageType::StaticClass();
+        Enemy->TakeDamage(20.0f, d, Pawn->GetController(), Pawn);
+        // UGameplayStatics::ApplyDamage(Enemy, 20.0f, Pawn->GetController(), Pawn, DamageType);
 
-    UE_LOG(LogTemp, Display, TEXT("DamageGive"));
+        UE_LOG(LogTemp, Display, TEXT("DamageGive"));
+    }
     Pawn->SetPhaseActionInProgress(false);
     EndAnimatoinAnimNotify->OnEndAnimation.Clear();
 }
