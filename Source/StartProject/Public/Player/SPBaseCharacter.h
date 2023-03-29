@@ -30,6 +30,8 @@ public:
     bool GetIsEnemyWidgwetAdded() { return IsEnemyWidgwetAdded; }
     void SetIsEnemyWidgwetAdded(bool Value) { IsEnemyWidgwetAdded = Value; }
 
+    void ClearWidgetEnemy();
+
 protected:
     virtual void BeginPlay() override;
 

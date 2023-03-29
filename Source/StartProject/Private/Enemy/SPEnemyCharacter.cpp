@@ -38,7 +38,11 @@ void ASPEnemyCharacter::DestroyDeadActor()
         if (BSComponent)
         {
             BSComponent->SetUpgradePoint(1);
+            BSComponent->SetBSActive(false);
         }
+        EnemyActor->ClearWidgetEnemy();
+        EnemyActor->SetBSStatus(false);
+        EnemyActor->SetIsEnemyWidgwetAdded(false);
     }
     this->Destroy();
 }

@@ -39,8 +39,12 @@ EBTNodeResult::Type USPAttackSystemTask::ExecuteTask(UBehaviorTreeComponent& Own
     {
         FocusActor->SetEnemyActor(Pawn);
     }
-    FocusActor->SetBSStatus(true);
+    else if (FocusActor->GetEnemyActor()->GetName() != Pawn->GetName())
+    {
+        FocusActor->SetEnemyActor(Pawn);
+    }
     if (HealthComponent->IsDead()) return EBTNodeResult::Failed;
+    FocusActor->SetBSStatus(true);
 
     auto CurrentHealth = HealthComponent->GetCurrentHealth();
     if (CurrentHealth > 80 && CurrentHealth <= 100)

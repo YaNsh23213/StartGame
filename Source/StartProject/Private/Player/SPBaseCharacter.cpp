@@ -56,6 +56,10 @@ void ASPBaseCharacter::Tick(float DeltaTime)
         }
     }
 }
+void ASPBaseCharacter::ClearWidgetEnemy() 
+{
+    WidgetEnemyInstance->RemoveFromViewport();
+}
 void ASPBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
     Super::SetupPlayerInputComponent(PlayerInputComponent);
