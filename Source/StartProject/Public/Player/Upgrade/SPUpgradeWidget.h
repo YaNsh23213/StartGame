@@ -8,6 +8,7 @@
 
 class UButton;
 class UTextBlock;
+class UImage;
 UCLASS()
 class STARTPROJECT_API USPUpgradeWidget : public UUserWidget
 {
@@ -40,6 +41,52 @@ protected:
 
     UPROPERTY(meta = (BindWidget))
     UTextBlock* UpgradePoint;
+
+    UPROPERTY(meta = (BindWidget))
+    UTextBlock* LVLSlot1;
+    UPROPERTY(meta = (BindWidget))
+    UTextBlock* LVLSlot2;
+    UPROPERTY(meta = (BindWidget))
+    UTextBlock* LVLSlot3;
+    UPROPERTY(meta = (BindWidget))
+    UTextBlock* LVLSlot4;
+    UPROPERTY(meta = (BindWidget))
+    UTextBlock* LVLSlot5;
+    UPROPERTY(meta = (BindWidget))
+    UTextBlock* LVLSlot6;
+    UPROPERTY(meta = (BindWidget))
+    UTextBlock* LVLSlot7;
+    UPROPERTY(meta = (BindWidget))
+    UTextBlock* LVLSlot8;
+    UPROPERTY(meta = (BindWidget))
+    UTextBlock* LVLSlot9;
+    UPROPERTY(meta = (BindWidget))
+    UTextBlock* LVLSlot10;
+    UPROPERTY(meta = (BindWidget))
+    UTextBlock* LVLSlot11;
+
+    UPROPERTY(meta = (BindWidget))
+    UImage* ImageLVL1;
+    UPROPERTY(meta = (BindWidget))
+    UImage* ImageLVL2;
+    UPROPERTY(meta = (BindWidget))
+    UImage* ImageLVL3;
+    UPROPERTY(meta = (BindWidget))
+    UImage* ImageLVL4;
+    UPROPERTY(meta = (BindWidget))
+    UImage* ImageLVL5;
+    UPROPERTY(meta = (BindWidget))
+    UImage* ImageLVL6;
+    UPROPERTY(meta = (BindWidget))
+    UImage* ImageLVL7;
+    UPROPERTY(meta = (BindWidget))
+    UImage* ImageLVL8;
+    UPROPERTY(meta = (BindWidget))
+    UImage* ImageLVL9;
+    UPROPERTY(meta = (BindWidget))
+    UImage* ImageLVL10;
+    UPROPERTY(meta = (BindWidget))
+    UImage* ImageLVL11;
 
 private:
     UFUNCTION()

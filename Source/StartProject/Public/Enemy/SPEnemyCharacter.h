@@ -8,6 +8,7 @@
 class USPAIPerceptionComponent;
 class USPHealthAIAComponent;
 class UAnimMontage;
+class ASPBaseCharacter;
 UCLASS()
 class STARTPROJECT_API ASPEnemyCharacter : public ACharacter
 {
@@ -21,6 +22,9 @@ public:
 
     UAnimMontage* GetAnimMontagePhase1() { return AnimMontagePhase1; }
     UAnimMontage* GetAnimMontagePhase2() { return AnimMontagePhase2; }
+
+    ASPBaseCharacter* GetPEnemyActor() { return EnemyActor; }
+    void SetEnemyActor(ASPBaseCharacter* Value) { EnemyActor = Value; }
 
 protected:
     virtual void BeginPlay() override;
@@ -43,6 +47,11 @@ protected:
     bool PhaseActionInProgress = false;
 
     void DeadAnim();
+
+    void DestroyDeadActor();
+
+    UPROPERTY()
+    ASPBaseCharacter* EnemyActor;
 
 public:
     virtual void Tick(float DeltaTime) override;

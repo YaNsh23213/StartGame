@@ -29,19 +29,20 @@ EBTNodeResult::Type USPAttackSystemTask::ExecuteTask(UBehaviorTreeComponent& Own
     Pawn = Cast<ASPEnemyCharacter>(Controller->GetPawn());
     if (!Pawn) return EBTNodeResult::Failed;
 
-    const auto Component = Pawn->FindComponentByClass<USPHealthAIAComponent>();
-    if (!Component) return EBTNodeResult::Failed;
+    HealthComponent = Pawn->FindComponentByClass<USPHealthAIAComponent>();
+    if (!HealthComponent) return EBTNodeResult::Failed;
 
     FocusActor = Cast<ASPBaseCharacter>(BBComponent->GetValueAsObject(FocusKeyName));
+    Pawn->SetEnemyActor(FocusActor);
     if (!FocusActor) return EBTNodeResult::Failed;
     if (FocusActor->GetEnemyActor() == nullptr)
     {
         FocusActor->SetEnemyActor(Pawn);
     }
     FocusActor->SetBSStatus(true);
-    if (Component->IsDead()) return EBTNodeResult::Failed;
+    if (HealthComponent->IsDead()) return EBTNodeResult::Failed;
 
-    auto CurrentHealth = Component->GetCurrentHealth();
+    auto CurrentHealth = HealthComponent->GetCurrentHealth();
     if (CurrentHealth > 80 && CurrentHealth <= 100)
     {
         if (Pawn->GetPhaseActionInProgress() == false)
@@ -109,8 +110,8 @@ void USPAttackSystemTask::EndPhaseOne()
 
 void USPAttackSystemTask::HalfPhase2()
 {
-    const auto Enemy = Cast<AActor>(BBComponent->GetValueAsObject(FocusKeyName));
-    auto Distance = Pawn->GetDistanceTo(Enemy);
+    if (HealthComponent->IsDead()) return GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
+    auto Distance = Pawn->GetDistanceTo(FocusActor);
     UE_LOG(LogTemp, Display, TEXT("Distance %f"), Distance);
     if (Distance < 300.0f && Distance > 0)
     {
@@ -129,6 +130,10 @@ void USPAttackSystemTask::HalfPhase2()
                 GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
             }
         }
+    }
+    if (Distance == 0)
+    {
+        GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
     }
 }
 void USPAttackSystemTask::EndPhaseTwo()

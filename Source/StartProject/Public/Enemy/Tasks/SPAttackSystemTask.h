@@ -12,6 +12,7 @@ class UBlackboardComponent;
 class USPEndAnimatoinAnimNotify;
 class AAIController;
 class ASPBaseCharacter;
+class USPHealthAIAComponent;
 UCLASS()
 class STARTPROJECT_API USPAttackSystemTask : public UBTTaskNode
 {
@@ -38,7 +39,8 @@ protected:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Info")
     TSubclassOf<UDamageType> DamageType;
 
-
+    UPROPERTY()
+    USPHealthAIAComponent* HealthComponent;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Phase1")
     TSubclassOf<AActor> SpellPhase1;
