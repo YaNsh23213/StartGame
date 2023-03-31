@@ -13,16 +13,19 @@ class UHorizontalBox;
 UCLASS()
 class STARTPROJECT_API USPBottomBarSkillsWidget : public UUserWidget
 {
+public:
 	GENERATED_BODY()
     virtual void NativeOnInitialized() override;
 
+    void InitSkills();
+    void OnSkillSelected(const FBottomSlotActionInfo& Data);
+
+protected:
     UPROPERTY(meta = (BindWidget))
     UHorizontalBox* SkillBox;
 
     UPROPERTY()
     TArray<USPSlotSkillWidget*> ArraySkill;
 
-    void OnSkillSelected(const FBottomSlotActionInfo& Data);
-    void InitSkills();
 	
 };

@@ -25,6 +25,13 @@ public:
     UFUNCTION(BlueprintCallable)
     float GetHealthPercent();
 
+    float GetCurrentHealth() { return CurrentHealth; }
+
+    float GetArmorModifier() { return ArmorModifier; }
+    void SetArmorModifier(float Amount) { ArmorModifier = Amount; }
+
+    void HealUp(float Amount);
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -33,6 +40,9 @@ protected:
 
 	UPROPERTY()
     float CurrentHealth;
+
+    UPROPERTY()
+    float ArmorModifier=0;
 
 private:
     UFUNCTION()

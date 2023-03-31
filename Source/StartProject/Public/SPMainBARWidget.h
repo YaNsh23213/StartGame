@@ -17,9 +17,6 @@ protected:
     UPROPERTY(meta = (BindWidget))
     UProgressBar* HP;
 
-    UPROPERTY(meta = (BindWidget))
-    UProgressBar* XP;
-
     private:
     UFUNCTION()
     void UpdateHealth(float Value);

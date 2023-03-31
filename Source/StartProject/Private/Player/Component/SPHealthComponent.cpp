@@ -1,23 +1,25 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "Player/Component/SPHealthComponent.h"
-
 
 USPHealthComponent::USPHealthComponent()
 {
-	PrimaryComponentTick.bCanEverTick = false;
-
+    PrimaryComponentTick.bCanEverTick = false;
 }
 
 float USPHealthComponent::GetHealthPercent()
 {
-    return CurrentHealth/MaxHealth;
+    return CurrentHealth / MaxHealth;
+}
+
+void USPHealthComponent::HealUp(float Amount)
+{
+    CurrentHealth = FMath::Clamp(CurrentHealth + Amount, 0.0f, MaxHealth);
 }
 
 void USPHealthComponent::BeginPlay()
 {
-	Super::BeginPlay();
+    Super::BeginPlay();
     CurrentHealth = MaxHealth;
     AActor* ComponentOwner = GetOwner();
     if (ComponentOwner)
@@ -31,7 +33,7 @@ void USPHealthComponent::OnTakeAnyDamage(
 {
     if (Damage <= 0.0f || IsDead()) return;
     UE_LOG(LogTemp, Display, TEXT("Take Damage %f"), Damage);
-    CurrentHealth = FMath::Clamp(CurrentHealth - Damage, 0.0f, MaxHealth);
+    CurrentHealth = FMath::Clamp(CurrentHealth - (Damage - ArmorModifier), 0.0f, MaxHealth);
     OnHealthChanged.Broadcast(CurrentHealth);
     if (IsDead())
     {

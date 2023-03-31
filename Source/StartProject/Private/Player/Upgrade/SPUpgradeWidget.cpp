@@ -7,6 +7,7 @@
 #include "Player/Components/SPSkillsComponent.h"
 #include "Components/TextBlock.h"
 #include "Player/Components/SPBSComponent.h"
+#include "Skills/SPBottomBarSkillsWidget.h"
 
 void USPUpgradeWidget::NativeOnInitialized()
 {
@@ -342,6 +343,7 @@ void USPUpgradeWidget::UpgradeCast1()
             {
                 Element.CurrentLVL = Element.CurrentLVL + 1;
                 Widget->SetFBottomSlotActionInfo(Element);
+                Widget->Update();
                 Point = Point - 1;
                 BSComponent->SetUpgradePoint(-1);
                 UpgradePoint->SetText(FText::FromString(FString::FromInt(Point)));
@@ -387,6 +389,7 @@ void USPUpgradeWidget::UpgradeCast2()
             {
                 Element.CurrentLVL = Element.CurrentLVL + 1;
                 Widget->SetFBottomSlotActionInfo(Element);
+                Widget->Update();
                 Point = Point - 1;
                 BSComponent->SetUpgradePoint(-1);
                 UpgradePoint->SetText(FText::FromString(FString::FromInt(Point)));
@@ -432,6 +435,7 @@ void USPUpgradeWidget::UpgradeCast3()
             {
                 Element.CurrentLVL = Element.CurrentLVL + 1;
                 Widget->SetFBottomSlotActionInfo(Element);
+                Widget->Update();
                 Point = Point - 1;
                 BSComponent->SetUpgradePoint(-1);
                 UpgradePoint->SetText(FText::FromString(FString::FromInt(Point)));
@@ -477,6 +481,7 @@ void USPUpgradeWidget::UpgradeCast4()
             {
                 Element.CurrentLVL = Element.CurrentLVL + 1;
                 Widget->SetFBottomSlotActionInfo(Element);
+                Widget->Update();
                 Point = Point - 1;
                 BSComponent->SetUpgradePoint(-1);
                 UpgradePoint->SetText(FText::FromString(FString::FromInt(Point)));
@@ -522,6 +527,7 @@ void USPUpgradeWidget::UpgradeCast5()
             {
                 Element.CurrentLVL = Element.CurrentLVL + 1;
                 Widget->SetFBottomSlotActionInfo(Element);
+                Widget->Update();
                 Point = Point - 1;
                 BSComponent->SetUpgradePoint(-1);
                 UpgradePoint->SetText(FText::FromString(FString::FromInt(Point)));
@@ -567,6 +573,7 @@ void USPUpgradeWidget::UpgradeCast6()
             {
                 Element.CurrentLVL = Element.CurrentLVL + 1;
                 Widget->SetFBottomSlotActionInfo(Element);
+                Widget->Update();
                 Point = Point - 1;
                 BSComponent->SetUpgradePoint(-1);
                 UpgradePoint->SetText(FText::FromString(FString::FromInt(Point)));
@@ -612,6 +619,7 @@ void USPUpgradeWidget::UpgradeCast7()
             {
                 Element.CurrentLVL = Element.CurrentLVL + 1;
                 Widget->SetFBottomSlotActionInfo(Element);
+                Widget->Update();
                 Point = Point - 1;
                 BSComponent->SetUpgradePoint(-1);
                 UpgradePoint->SetText(FText::FromString(FString::FromInt(Point)));
@@ -657,6 +665,7 @@ void USPUpgradeWidget::UpgradeCast8()
             {
                 Element.CurrentLVL = Element.CurrentLVL + 1;
                 Widget->SetFBottomSlotActionInfo(Element);
+                Widget->Update();
                 Point = Point - 1;
                 BSComponent->SetUpgradePoint(-1);
                 UpgradePoint->SetText(FText::FromString(FString::FromInt(Point)));
@@ -691,7 +700,7 @@ void USPUpgradeWidget::UpgradeCast9()
     const auto SkillsComponent = Pawn->FindComponentByClass<USPSkillsComponent>();
     if (!SkillsComponent) return;
     const auto Widget = SkillsComponent->GetArraySkillBottomBar()[8];
-    if (Widget)
+    if (Widget) 
     {
         UE_LOG(LogTemp, Warning, TEXT("Try Upgrade"));
         auto Element = Widget->GetFBottomSlotActionInfo();
@@ -702,6 +711,7 @@ void USPUpgradeWidget::UpgradeCast9()
             {
                 Element.CurrentLVL = Element.CurrentLVL + 1;
                 Widget->SetFBottomSlotActionInfo(Element);
+                Widget->Update();
                 Point = Point - 1;
                 BSComponent->SetUpgradePoint(-1);
                 UpgradePoint->SetText(FText::FromString(FString::FromInt(Point)));
@@ -718,6 +728,7 @@ void USPUpgradeWidget::UpgradeCast9()
                 {
                     ImageLVL9->SetBrushFromSoftTexture(Element.ImageSkill_3);
                 }
+                auto BottomBar = Cast<USPBottomBarSkillsWidget>(Pawn->GetBottomWidgwet());
             }
         }
         else
@@ -747,6 +758,7 @@ void USPUpgradeWidget::UpgradeCast10()
             {
                 Element.CurrentLVL = Element.CurrentLVL + 1;
                 Widget->SetFBottomSlotActionInfo(Element);
+                Widget->Update();
                 Point = Point - 1;
                 BSComponent->SetUpgradePoint(-1);
                 UpgradePoint->SetText(FText::FromString(FString::FromInt(Point)));
@@ -792,6 +804,7 @@ void USPUpgradeWidget::UpgradeCast11()
             {
                 Element.CurrentLVL = Element.CurrentLVL + 1;
                 Widget->SetFBottomSlotActionInfo(Element);
+                Widget->Update();
                 Point = Point - 1;
                 BSComponent->SetUpgradePoint(-1);
                 UpgradePoint->SetText(FText::FromString(FString::FromInt(Point)));

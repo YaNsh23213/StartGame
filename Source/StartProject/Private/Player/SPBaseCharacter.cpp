@@ -11,6 +11,9 @@
 #include "Enemy/SPHealthAIAComponent.h"
 #include "Enemy/SPEnemyCharacter.h"
 #include "Enemy/SPHealthBarWidget.h"
+#include "Skills/SPBottomBarSkillsWidget.h"
+#include "Player/HealBoost/SPHealBoostWidget.h"
+#include "Components/SphereComponent.h"
 
 ASPBaseCharacter::ASPBaseCharacter()
 {
@@ -22,9 +25,14 @@ ASPBaseCharacter::ASPBaseCharacter()
     SkillsComponent = CreateDefaultSubobject<USPSkillsComponent>("SkillsComponent");
     BSComponent = CreateDefaultSubobject<USPBSComponent>("BSComponent");
     HealthComponent = CreateDefaultSubobject<USPHealthComponent>("HealthComponent");
+    SphereComponent = CreateDefaultSubobject<USphereComponent>("SphereComponent");
+    SphereComponent->SetupAttachment(RootComponent);
 
     CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComp3P"));
     CameraComponent->SetupAttachment(SpringArmComponent);
+
+    SphereComponent->OnComponentBeginOverlap.AddDynamic(this, &ASPBaseCharacter::BeginOverlapNPC);
+    SphereComponent->OnComponentEndOverlap.AddDynamic(this, &ASPBaseCharacter::EndOverlapNPC);
 }
 void ASPBaseCharacter::BeginPlay()
 {
@@ -37,9 +45,14 @@ void ASPBaseCharacter::BeginPlay()
     }
     WidgetPauseInstance = CreateWidget<UUserWidget>(GetWorld(), WidgetClass);
     WidgetEnemyInstance = CreateWidget<UUserWidget>(GetWorld(), WidgetEnemy);
+    BottomBarInstance = CreateWidget<UUserWidget>(GetWorld(), BottomBar);
+    HealBoostInstance = CreateWidget<UUserWidget>(GetWorld(), HealBoost);
+    RequestInteractInstance = CreateWidget<UUserWidget>(GetWorld(), RequestInteract);
+    BottomBarInstance->AddToViewport();
+    HealBoostInstance->AddToViewport();
     if (HealthComponent)
     {
-        //HealthComponent->IsDead.
+        // HealthComponent->IsDead.
     }
 }
 
@@ -56,7 +69,21 @@ void ASPBaseCharacter::Tick(float DeltaTime)
         }
     }
 }
-void ASPBaseCharacter::ClearWidgetEnemy() 
+void ASPBaseCharacter::BeginOverlapNPC(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+    int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+    UE_LOG(LogTemp, Display, TEXT("Start Overlap"));
+    CanInteract = true;
+    RequestInteractInstance->AddToViewport();
+}
+void ASPBaseCharacter::EndOverlapNPC(
+    UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+    UE_LOG(LogTemp, Display, TEXT("End Overlap"));
+    CanInteract = false;
+    Interact();
+}
+void ASPBaseCharacter::ClearWidgetEnemy()
 {
     WidgetEnemyInstance->RemoveFromViewport();
 }
@@ -83,6 +110,11 @@ void ASPBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
     PlayerInputComponent->BindAction("Pause", IE_Pressed, this, &ASPBaseCharacter::Pause);
     PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ASPBaseCharacter::Jump);
+
+    PlayerInputComponent->BindAction("Heal", IE_Pressed, this, &ASPBaseCharacter::UseHealPotion);
+    PlayerInputComponent->BindAction("Boost", IE_Pressed, this, &ASPBaseCharacter::UseBoostPotion);
+
+    PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &ASPBaseCharacter::Interact);
 }
 
 void ASPBaseCharacter::Turn(float Value)
@@ -273,4 +305,64 @@ void ASPBaseCharacter::Pause()
     PlayerController->SetInputMode(UI);
     PlayerController->bShowMouseCursor = true;
     WidgetPauseInstance->AddToViewport();
+}
+void ASPBaseCharacter::UseHealPotion()
+{
+    auto Widget = Cast<USPHealBoostWidget>(HealBoostInstance);
+    if (Widget)
+    {
+        auto AmountHeal = Widget->GetAmountHeal();
+        if (AmountHeal > 0)
+        {
+            HealthComponent->HealUp(30.0f);
+            AmountHeal = AmountHeal - 1;
+            Widget->SetAmountHeal(AmountHeal);
+            Widget->HealUpdate(FText::FromString(FString::FromInt(AmountHeal)));
+        }
+    }
+}
+void ASPBaseCharacter::UseBoostPotion()
+{
+    auto Widget = Cast<USPHealBoostWidget>(HealBoostInstance);
+    if (Widget)
+    {
+        auto AmountBoost = Widget->GetAmountBoost();
+        if (AmountBoost > 0)
+        {
+            if (HealthComponent->GetArmorModifier() <= 0.0f)
+            {
+                HealthComponent->SetArmorModifier(10.0f);
+                AmountBoost = AmountBoost - 1;
+                Widget->SetAmountBoost(AmountBoost);
+                Widget->BoostUdate(FText::FromString(FString::FromInt(AmountBoost)));
+                GetWorld()->GetTimerManager().SetTimer(BaseHandle, this, &ASPBaseCharacter::AddBostTime, 10.0f, false);
+            }
+        }
+    }
+}
+void ASPBaseCharacter::AddBostTime()
+{
+    HealthComponent->SetArmorModifier(0.0f);
+    GetWorld()->GetTimerManager().ClearTimer(BaseHandle);
+}
+void ASPBaseCharacter::Interact()
+{
+    if (OpenInteract == true)
+    {
+        UE_LOG(LogTemp, Display, TEXT("Close Alchemist Shop"));
+        OpenInteract = false;
+        return;
+    }
+    if (CanInteract == true && OpenInteract == false)
+    {
+        RequestInteractInstance->RemoveFromViewport();
+        UE_LOG(LogTemp, Display, TEXT("Open Alchemist Shop"));
+        OpenInteract = true;
+        return;
+    }
+    if (CanInteract == false)
+    {
+        UE_LOG(LogTemp, Display, TEXT("Not In Radius"));
+        return;
+    }
 }

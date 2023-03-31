@@ -28,6 +28,9 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ActionInfo")
     int32 CurrentLVL = 1;
 
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ActionInfo")
+    FText Key;
+
     // Need more info from Action
 };
 
@@ -45,6 +48,8 @@ public:
 
     FBottomSlotActionInfo GetFBottomSlotActionInfo() const { return BottomSlotActionInfo; }
     void SetFBottomSlotActionInfo(FBottomSlotActionInfo Data) { BottomSlotActionInfo = Data; }
+
+    void Update();
 
 protected:
     virtual void NativeOnInitialized() override;

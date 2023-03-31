@@ -13,6 +13,9 @@ class USPSkillsComponent;
 class USPBSComponent;
 class USPHealthComponent;
 class UAnimMontage;
+class USPBottomBarSkillsWidget;
+class USPHealBoostWidget;
+class USphereComponent;
 UCLASS()
 class STARTPROJECT_API ASPBaseCharacter : public ACharacter
 {
@@ -32,6 +35,8 @@ public:
 
     void ClearWidgetEnemy();
 
+    UUserWidget* GetBottomWidgwet() { return BottomBarInstance; }
+
 protected:
     virtual void BeginPlay() override;
 
@@ -50,6 +55,9 @@ protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
     USPHealthComponent* HealthComponent;
 
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+    USphereComponent* SphereComponent;
+
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
     TSubclassOf<AActor> Weapon;
 
@@ -65,13 +73,40 @@ protected:
     UPROPERTY(EditAnywhere, Category = "WidgetEnemy")
     TSubclassOf<UUserWidget> WidgetEnemy;
 
-     UPROPERTY()
+    UPROPERTY(EditAnywhere, Category = "Widget")
+    TSubclassOf<USPBottomBarSkillsWidget> BottomBar;
+
+    UPROPERTY(EditAnywhere, Category = "Widget")
+    TSubclassOf<USPHealBoostWidget> HealBoost;
+
+    UPROPERTY(EditAnywhere, Category = "Widget")
+    TSubclassOf<UUserWidget> RequestInteract;
+
+    UPROPERTY()
     UUserWidget* WidgetEnemyInstance;
 
     UPROPERTY()
+    UUserWidget* BottomBarInstance;
+
+    UPROPERTY()
+    UUserWidget* HealBoostInstance;
+
+    UPROPERTY()
+    UUserWidget* RequestInteractInstance;
+
+    UPROPERTY()
     bool BSStatus = false;
+
+    UPROPERTY()
+    bool CanInteract = false;
+
+    UPROPERTY()
+    bool OpenInteract = false;
+
     UPROPERTY()
     bool IsEnemyWidgwetAdded = false;
+
+    FTimerHandle BaseHandle;
 
 public:
     virtual void Tick(float DeltaTime) override;
@@ -101,4 +136,16 @@ private:
     void SlotAction11();
 
     void Pause();
+
+    void UseHealPotion();
+    void UseBoostPotion();
+
+    void AddBostTime();
+    UFUNCTION()
+    void BeginOverlapNPC(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex,
+        bool bFromSweep, const FHitResult& SweepResult);
+    UFUNCTION()
+    void EndOverlapNPC(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
+    void Interact();
 };
