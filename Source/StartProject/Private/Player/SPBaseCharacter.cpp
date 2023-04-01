@@ -14,6 +14,7 @@
 #include "Skills/SPBottomBarSkillsWidget.h"
 #include "Player/HealBoost/SPHealBoostWidget.h"
 #include "Components/SphereComponent.h"
+#include "Player/NPC/SPAlchemistShopWidget.h"
 
 ASPBaseCharacter::ASPBaseCharacter()
 {
@@ -48,6 +49,7 @@ void ASPBaseCharacter::BeginPlay()
     BottomBarInstance = CreateWidget<UUserWidget>(GetWorld(), BottomBar);
     HealBoostInstance = CreateWidget<UUserWidget>(GetWorld(), HealBoost);
     RequestInteractInstance = CreateWidget<UUserWidget>(GetWorld(), RequestInteract);
+    AlchemistShopInstance = CreateWidget<UUserWidget>(GetWorld(), AlchemistShop);
     BottomBarInstance->AddToViewport();
     HealBoostInstance->AddToViewport();
     if (HealthComponent)
@@ -347,16 +349,25 @@ void ASPBaseCharacter::AddBostTime()
 }
 void ASPBaseCharacter::Interact()
 {
+    auto PlayerController = Cast<APlayerController>(GetController());
     if (OpenInteract == true)
     {
         UE_LOG(LogTemp, Display, TEXT("Close Alchemist Shop"));
         OpenInteract = false;
+        FInputModeGameOnly Game;
+        PlayerController->SetInputMode(Game);
+        PlayerController->bShowMouseCursor = false;
+        AlchemistShopInstance->RemoveFromViewport();
         return;
     }
     if (CanInteract == true && OpenInteract == false)
     {
         RequestInteractInstance->RemoveFromViewport();
         UE_LOG(LogTemp, Display, TEXT("Open Alchemist Shop"));
+        FInputModeUIOnly UI;
+        PlayerController->SetInputMode(UI);
+        PlayerController->bShowMouseCursor = true;
+        AlchemistShopInstance->AddToViewport();
         OpenInteract = true;
         return;
     }

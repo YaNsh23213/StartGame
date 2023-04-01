@@ -16,6 +16,7 @@ class UAnimMontage;
 class USPBottomBarSkillsWidget;
 class USPHealBoostWidget;
 class USphereComponent;
+class USPAlchemistShopWidget;
 UCLASS()
 class STARTPROJECT_API ASPBaseCharacter : public ACharacter
 {
@@ -36,6 +37,7 @@ public:
     void ClearWidgetEnemy();
 
     UUserWidget* GetBottomWidgwet() { return BottomBarInstance; }
+    UUserWidget* GetHealBoostInstance() { return HealBoostInstance; }
 
 protected:
     virtual void BeginPlay() override;
@@ -82,6 +84,10 @@ protected:
     UPROPERTY(EditAnywhere, Category = "Widget")
     TSubclassOf<UUserWidget> RequestInteract;
 
+    UPROPERTY(EditAnywhere, Category = "Widget")
+    TSubclassOf<USPAlchemistShopWidget> AlchemistShop;
+
+
     UPROPERTY()
     UUserWidget* WidgetEnemyInstance;
 
@@ -93,6 +99,9 @@ protected:
 
     UPROPERTY()
     UUserWidget* RequestInteractInstance;
+
+    UPROPERTY()
+    UUserWidget* AlchemistShopInstance;
 
     UPROPERTY()
     bool BSStatus = false;
