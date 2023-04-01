@@ -9,10 +9,17 @@ AActor* USPAIPerceptionComponent::GetEnemyActor() const
 {
     TArray<AActor*> ArrayActors;
     GetCurrentlyPerceivedActors(UAISense_Sight::StaticClass(), ArrayActors);
-    if (ArrayActors.Num() == 0) return nullptr;
-    for (auto Actor : ArrayActors)
+    if (ArrayActors.Num() != 0)
     {
-        return Actor;
+        for (auto Actor : ArrayActors)
+        {
+            return Actor;
+        }
+    }
+    if (EnemyActorPC != nullptr)
+    {
+        UE_LOG(LogTemp, Display, TEXT("Set in preceprion component %s"), *EnemyActorPC->GetName());
+        return EnemyActorPC;
     }
     return nullptr;
 }

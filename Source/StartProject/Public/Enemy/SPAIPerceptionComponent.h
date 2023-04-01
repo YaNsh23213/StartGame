@@ -16,5 +16,7 @@ class STARTPROJECT_API USPAIPerceptionComponent : public UAIPerceptionComponent
 public:
 
 	AActor* GetEnemyActor() const;
+    UPROPERTY()
+	AActor* EnemyActorPC;
 
 };

@@ -43,4 +43,6 @@ private:
     void UpgradeHealPotion();
     UFUNCTION()
     void UpgradeArmorPotion();
+    UFUNCTION()
+    void CloseMenu();
 };

@@ -40,6 +40,9 @@ protected:
     UButton* Upgrade_11;
 
     UPROPERTY(meta = (BindWidget))
+    UButton* CloseBtn;
+
+    UPROPERTY(meta = (BindWidget))
     UTextBlock* UpgradePoint;
 
     UPROPERTY(meta = (BindWidget))
@@ -111,5 +114,7 @@ private:
     void UpgradeCast10();
     UFUNCTION()
     void UpgradeCast11();
+    UFUNCTION()
+    void Close();
 
 };

@@ -17,6 +17,7 @@ class USPBottomBarSkillsWidget;
 class USPHealBoostWidget;
 class USphereComponent;
 class USPAlchemistShopWidget;
+class USPUpgradeWidget;
 UCLASS()
 class STARTPROJECT_API ASPBaseCharacter : public ACharacter
 {
@@ -87,6 +88,8 @@ protected:
     UPROPERTY(EditAnywhere, Category = "Widget")
     TSubclassOf<USPAlchemistShopWidget> AlchemistShop;
 
+    UPROPERTY(EditAnywhere, Category = "Widget")
+    TSubclassOf<USPUpgradeWidget> UpgradeWidget;
 
     UPROPERTY()
     UUserWidget* WidgetEnemyInstance;
@@ -104,6 +107,9 @@ protected:
     UUserWidget* AlchemistShopInstance;
 
     UPROPERTY()
+    UUserWidget* UpgradeWidgetInstance;
+
+    UPROPERTY()
     bool BSStatus = false;
 
     UPROPERTY()
@@ -115,12 +121,17 @@ protected:
     UPROPERTY()
     bool IsEnemyWidgwetAdded = false;
 
+    UPROPERTY()
+    AActor* NPC;
+
     FTimerHandle BaseHandle;
 
 public:
     virtual void Tick(float DeltaTime) override;
 
     virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+    void Interact();
 
 private:
     void Turn(float Value);
@@ -155,6 +166,4 @@ private:
         bool bFromSweep, const FHitResult& SweepResult);
     UFUNCTION()
     void EndOverlapNPC(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
-
-    void Interact();
 };

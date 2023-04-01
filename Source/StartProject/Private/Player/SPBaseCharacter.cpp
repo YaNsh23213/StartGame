@@ -15,6 +15,7 @@
 #include "Player/HealBoost/SPHealBoostWidget.h"
 #include "Components/SphereComponent.h"
 #include "Player/NPC/SPAlchemistShopWidget.h"
+#include "Player/Upgrade/SPUpgradeWidget.h"
 
 ASPBaseCharacter::ASPBaseCharacter()
 {
@@ -48,6 +49,7 @@ void ASPBaseCharacter::BeginPlay()
     WidgetEnemyInstance = CreateWidget<UUserWidget>(GetWorld(), WidgetEnemy);
     BottomBarInstance = CreateWidget<UUserWidget>(GetWorld(), BottomBar);
     HealBoostInstance = CreateWidget<UUserWidget>(GetWorld(), HealBoost);
+    UpgradeWidgetInstance = CreateWidget<UUserWidget>(GetWorld(), UpgradeWidget);
     RequestInteractInstance = CreateWidget<UUserWidget>(GetWorld(), RequestInteract);
     AlchemistShopInstance = CreateWidget<UUserWidget>(GetWorld(), AlchemistShop);
     BottomBarInstance->AddToViewport();
@@ -76,6 +78,7 @@ void ASPBaseCharacter::BeginOverlapNPC(UPrimitiveComponent* OverlappedComponent,
 {
     UE_LOG(LogTemp, Display, TEXT("Start Overlap"));
     CanInteract = true;
+    NPC = OtherActor;
     RequestInteractInstance->AddToViewport();
 }
 void ASPBaseCharacter::EndOverlapNPC(
@@ -320,6 +323,7 @@ void ASPBaseCharacter::UseHealPotion()
             AmountHeal = AmountHeal - 1;
             Widget->SetAmountHeal(AmountHeal);
             Widget->HealUpdate(FText::FromString(FString::FromInt(AmountHeal)));
+            HealthComponent->OnHealthChanged.Broadcast(0);
         }
     }
 }
@@ -367,7 +371,14 @@ void ASPBaseCharacter::Interact()
         FInputModeUIOnly UI;
         PlayerController->SetInputMode(UI);
         PlayerController->bShowMouseCursor = true;
-        AlchemistShopInstance->AddToViewport();
+        if (NPC->ActorHasTag("Potion"))
+        {
+            AlchemistShopInstance->AddToViewport();
+        }
+        if (NPC->ActorHasTag("Talent"))
+        {
+            UpgradeWidgetInstance->AddToViewport();
+        }
         OpenInteract = true;
         return;
     }

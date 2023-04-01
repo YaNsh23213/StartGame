@@ -35,6 +35,10 @@ void USPAlchemistShopWidget::NativeOnInitialized()
         auto AmountArmorPotion = Widget->GetAmountBoost();
         AmountArmor->SetText(FText::FromString(FString::FromInt(AmountArmorPotion)));
     }
+    if (CloseButton)
+    {
+        CloseButton->OnClicked.AddDynamic(this, &USPAlchemistShopWidget::CloseMenu);
+    }
 }
 
 void USPAlchemistShopWidget::UpgradeHealPotion()
@@ -74,4 +78,17 @@ void USPAlchemistShopWidget::UpgradeArmorPotion()
             
         }
     }
+}
+
+void USPAlchemistShopWidget::CloseMenu()
+{
+    auto PlayerController = GetOwningPlayer();
+    if (PlayerController)
+    {
+        FInputModeGameOnly Game;
+        PlayerController->SetInputMode(Game);
+        PlayerController->bShowMouseCursor = false;
+    }
+    Owner->Interact();
+    this->RemoveFromViewport();
 }

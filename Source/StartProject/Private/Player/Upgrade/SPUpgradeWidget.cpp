@@ -62,6 +62,10 @@ void USPUpgradeWidget::NativeOnInitialized()
     {
         Upgrade_11->OnClicked.AddDynamic(this, &USPUpgradeWidget::UpgradeCast11);
     }
+    if (CloseBtn)
+    {
+        CloseBtn->OnClicked.AddDynamic(this, &USPUpgradeWidget::Close);
+    }
     if (UpgradePoint)
     {
         auto Point = BSComponent->GetUpgradePoint();
@@ -828,4 +832,18 @@ void USPUpgradeWidget::UpgradeCast11()
             UE_LOG(LogTemp, Warning, TEXT("Cant Upgrade"));
         }
     }
+}
+
+void USPUpgradeWidget::Close()
+{
+    auto PlayerController = GetOwningPlayer();
+    if (PlayerController)
+    {
+        FInputModeGameOnly Game;
+        PlayerController->SetInputMode(Game);
+        PlayerController->bShowMouseCursor = false;
+    }
+    const auto Owner = Cast<ASPBaseCharacter>(PlayerController->GetPawn());
+    Owner->Interact();
+    this->RemoveFromViewport();
 }
