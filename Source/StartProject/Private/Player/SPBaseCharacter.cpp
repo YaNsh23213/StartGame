@@ -16,6 +16,8 @@
 #include "Components/SphereComponent.h"
 #include "Player/NPC/SPAlchemistShopWidget.h"
 #include "Player/Upgrade/SPUpgradeWidget.h"
+#include "MainMenu/UI/SPEndGameWidget.h"
+#include "SPMainBARWidget.h"
 
 ASPBaseCharacter::ASPBaseCharacter()
 {
@@ -45,6 +47,7 @@ void ASPBaseCharacter::BeginPlay()
         AActor* SpawnedActor = GetWorld()->SpawnActor<AActor>(Weapon, SocketTransform);
         SpawnedActor->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, "WeaponSocket");
     }
+    GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ASPBaseCharacter::StartGame, 39.18f, false);
     WidgetPauseInstance = CreateWidget<UUserWidget>(GetWorld(), WidgetClass);
     WidgetEnemyInstance = CreateWidget<UUserWidget>(GetWorld(), WidgetEnemy);
     BottomBarInstance = CreateWidget<UUserWidget>(GetWorld(), BottomBar);
@@ -52,12 +55,17 @@ void ASPBaseCharacter::BeginPlay()
     UpgradeWidgetInstance = CreateWidget<UUserWidget>(GetWorld(), UpgradeWidget);
     RequestInteractInstance = CreateWidget<UUserWidget>(GetWorld(), RequestInteract);
     AlchemistShopInstance = CreateWidget<UUserWidget>(GetWorld(), AlchemistShop);
-    BottomBarInstance->AddToViewport();
-    HealBoostInstance->AddToViewport();
+    EndGameWidgetInstance = CreateWidget<UUserWidget>(GetWorld(), EndGameWidget);
+    //MainBARWidgetInstance = CreateWidget<UUserWidget>(GetWorld(), MainBARWidget);
+}
+void ASPBaseCharacter::StartGame() 
+{
     if (HealthComponent)
     {
-        // HealthComponent->IsDead.
+        HealthComponent->OnDeath.AddUObject(this, &ASPBaseCharacter::EndGame);
     }
+    BottomBarInstance->AddToViewport();
+    HealBoostInstance->AddToViewport();
 }
 
 void ASPBaseCharacter::Tick(float DeltaTime)
@@ -87,6 +95,15 @@ void ASPBaseCharacter::EndOverlapNPC(
     UE_LOG(LogTemp, Display, TEXT("End Overlap"));
     CanInteract = false;
     Interact();
+}
+void ASPBaseCharacter::EndGame() 
+{
+    auto PlayerController = Cast<APlayerController>(GetController());
+    UGameplayStatics::SetGamePaused(GetWorld(), true);
+    FInputModeUIOnly UI;
+    PlayerController->SetInputMode(UI);
+    PlayerController->bShowMouseCursor = true;
+    EndGameWidgetInstance->AddToViewport();
 }
 void ASPBaseCharacter::ClearWidgetEnemy()
 {

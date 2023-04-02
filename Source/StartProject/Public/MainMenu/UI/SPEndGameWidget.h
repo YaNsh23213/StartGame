@@ -21,5 +21,6 @@ protected:
     FString Level;
 
 private:
+    UFUNCTION()
     void NewGame();
 };
