@@ -94,6 +94,7 @@ void ASPBaseCharacter::EndOverlapNPC(
 {
     UE_LOG(LogTemp, Display, TEXT("End Overlap"));
     CanInteract = false;
+    RequestInteractInstance->RemoveFromViewport();
     Interact();
 }
 void ASPBaseCharacter::EndGame() 
@@ -380,6 +381,7 @@ void ASPBaseCharacter::Interact()
         PlayerController->bShowMouseCursor = false;
         AlchemistShopInstance->RemoveFromViewport();
         return;
+
     }
     if (CanInteract == true && OpenInteract == false)
     {
